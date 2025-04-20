@@ -10,9 +10,9 @@ import java.nio.charset.StandardCharsets;
 
 public class ConsumeApi {
     public String GetData(String address) throws IOException, InterruptedException {
-        String encodedAddress = URLEncoder.encode(address, StandardCharsets.UTF_8);
+//        String encodedAddress = URLEncoder.encode(address, StandardCharsets.UTF_8);
         HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder().uri(URI.create("http://www.omdbapi.com/?t=" + encodedAddress + "&apikey=29b6d465")).build();
+        HttpRequest request = HttpRequest.newBuilder().uri(URI.create(address)).build();
         HttpResponse<String> response = null;
 
         try {
