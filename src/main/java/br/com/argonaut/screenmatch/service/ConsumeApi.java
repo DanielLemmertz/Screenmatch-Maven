@@ -9,7 +9,7 @@ import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 
 public class ConsumeApi {
-    public String GetData(String address) throws IOException, InterruptedException {
+    public String GetData(String address)  {
 //        String encodedAddress = URLEncoder.encode(address, StandardCharsets.UTF_8);
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder().uri(URI.create(address)).build();
