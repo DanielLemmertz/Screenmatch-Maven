@@ -3,12 +3,17 @@ package br.com.argonaut.screenmatch.main;
 import br.com.argonaut.screenmatch.model.DataEpisode;
 import br.com.argonaut.screenmatch.model.DataSeason;
 import br.com.argonaut.screenmatch.model.DataSerie;
+import br.com.argonaut.screenmatch.model.Episode;
 import br.com.argonaut.screenmatch.service.ConsumeApi;
 import br.com.argonaut.screenmatch.service.DataConverter;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class Main {
     private Scanner scanner = new Scanner(System.in);
@@ -43,5 +48,27 @@ public class Main {
         seasonsList.forEach(System.out::println);
 
         seasonsList.forEach(t -> t.episodes().forEach(e -> System.out.println(("Episodio " + e.number() + "/Temp: " + t.season() + ": " + e.title()))));
+
+        System.out.println("-------------------Melhores Episodios-------------------");
+        List<DataEpisode> dataEpisodes = seasonsList.stream().flatMap(t -> t.episodes().stream()).collect(Collectors.toList());
+
+        dataEpisodes.stream().filter(e -> !e.rating().equalsIgnoreCase("N/A")).sorted(Comparator.comparing(DataEpisode::rating).reversed()).limit(5).forEach(e -> System.out.println("Episódio: " + e.title() + " | Rating: " + e.rating()));
+
+        List<Episode> episodes = seasonsList.stream()
+                .flatMap(t -> t.episodes().stream().map(d -> new Episode(t.season(), d)))
+                .collect(Collectors.toList());
+
+        episodes.forEach(System.out::println);
+
+        System.out.println("A partir de que ano deseja ver os episodios da serie?");
+        var Year = scanner.nextInt();
+        scanner.nextLine();
+        LocalDate searchDate = LocalDate.of(Year, 1, 1);
+
+
+        episodes.stream()
+                .filter(e -> e.getDateRelease() != null && e.getDateRelease().isAfter(searchDate))
+                .forEach(System.out::println);
+
     }
 }
