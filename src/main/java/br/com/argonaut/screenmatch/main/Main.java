@@ -80,8 +80,11 @@ public class Main {
 
         Map<Integer, Double> reviewsForSeason = episodes.stream()
                 .collect(Collectors.groupingBy(Episode::getSeason, Collectors.averagingDouble(Episode::getRating)));
-
         System.out.println(reviewsForSeason);
+
+        DoubleSummaryStatistics statistics = episodes.stream()
+                .collect(Collectors.summarizingDouble(Episode::getRating));
+        System.out.println(statistics);
 
     }
 }
