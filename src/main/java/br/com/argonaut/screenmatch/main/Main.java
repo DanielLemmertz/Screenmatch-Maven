@@ -8,6 +8,7 @@ import br.com.argonaut.screenmatch.service.ConsumeApi;
 import br.com.argonaut.screenmatch.service.DataConverter;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Main {
     private final Scanner scanner = new Scanner(System.in);
@@ -60,11 +61,11 @@ public class Main {
                 .filter(e -> e.getTitle().toUpperCase().contains(TitleExcerpt.toUpperCase()))
                 .findFirst();
 
-        if (lookedEpisode.isPresent()){
+        if (lookedEpisode.isPresent()) {
             System.out.println("Episodio encontrado:");
-            System.out.println("Temporada: " + lookedEpisode.get().getSeason() + " | Episódio: "+ lookedEpisode.get().getNumber()+" | Titulo:"+lookedEpisode.get().getTitle())
+            System.out.println("Temporada: " + lookedEpisode.get().getSeason() + " | Episódio: " + lookedEpisode.get().getNumber() + " | Titulo:" + lookedEpisode.get().getTitle())
             ;
-        }else {
+        } else {
             System.out.println("Episodio não encontrado!");
         }
 //        System.out.println("A partir de que ano deseja ver os episodios da serie?");
@@ -76,6 +77,11 @@ public class Main {
 //        episodes.stream()
 //                .filter(e -> e.getDateRelease() != null && e.getDateRelease().isAfter(searchDate))
 //                .forEach(System.out::println);
+
+        Map<Integer, Double> reviewsForSeason = episodes.stream()
+                .collect(Collectors.groupingBy(Episode::getSeason, Collectors.averagingDouble(Episode::getRating)));
+
+        System.out.println(reviewsForSeason);
 
     }
 }
