@@ -84,7 +84,11 @@ public class Main {
 
         DoubleSummaryStatistics statistics = episodes.stream()
                 .collect(Collectors.summarizingDouble(Episode::getRating));
-        System.out.println(statistics);
+//        System.out.println(statistics);
+        System.out.println("|Média: " + statistics.getAverage() + " |");
+        System.out.println("|Quantidade: " + statistics.getCount() + " |");
+        System.out.println("|Pior episódio: " + statistics.getMin() + " |");
+        System.out.println("|Melhor episódio: " + statistics.getMax() + " |");
 
     }
 }
