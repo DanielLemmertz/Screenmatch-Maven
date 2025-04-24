@@ -8,7 +8,6 @@ import br.com.argonaut.screenmatch.service.ConsumeApi;
 import br.com.argonaut.screenmatch.service.DataConverter;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Main {
     private final Scanner scanner = new Scanner(System.in);
