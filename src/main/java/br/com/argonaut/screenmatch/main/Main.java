@@ -9,10 +9,7 @@ import br.com.argonaut.screenmatch.service.DataConverter;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Main {
@@ -60,15 +57,28 @@ public class Main {
 
         episodes.forEach(System.out::println);
 
-        System.out.println("A partir de que ano deseja ver os episodios da serie?");
-        var Year = scanner.nextInt();
-        scanner.nextLine();
-        LocalDate searchDate = LocalDate.of(Year, 1, 1);
+        System.out.println("Digite o nome de um dos episodios:");
+        var TitleExcerpt = scanner.nextLine();
+        Optional<Episode> lookedEpisode = episodes.stream()
+                .filter(e -> e.getTitle().toUpperCase().contains(TitleExcerpt.toUpperCase()))
+                .findFirst();
+
+        if (lookedEpisode.isPresent()){
+            System.out.println("Episodio encontrado:");
+            System.out.println("Temporada: " + lookedEpisode.get().getSeason() + " | Episódio: "+ lookedEpisode.get().getNumber()+" | Titulo:"+lookedEpisode.get().getTitle())
+            ;
+        }else {
+            System.out.println("Episodio não encontrado!");
+        }
+//        System.out.println("A partir de que ano deseja ver os episodios da serie?");
+//        var Year = scanner.nextInt();
+//        scanner.nextLine();
+//        LocalDate searchDate = LocalDate.of(Year, 1, 1);
 
 
-        episodes.stream()
-                .filter(e -> e.getDateRelease() != null && e.getDateRelease().isAfter(searchDate))
-                .forEach(System.out::println);
+//        episodes.stream()
+//                .filter(e -> e.getDateRelease() != null && e.getDateRelease().isAfter(searchDate))
+//                .forEach(System.out::println);
 
     }
 }
