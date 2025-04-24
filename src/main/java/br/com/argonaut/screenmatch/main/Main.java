@@ -7,26 +7,24 @@ import br.com.argonaut.screenmatch.model.Episode;
 import br.com.argonaut.screenmatch.service.ConsumeApi;
 import br.com.argonaut.screenmatch.service.DataConverter;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class Main {
-    private Scanner scanner = new Scanner(System.in);
-    private final String ADDRESS = "http://www.omdbapi.com/?t=";
-    private final String API_KEY = "&apikey=29b6d465";
-    private ConsumeApi consumeApi = new ConsumeApi();
-    private DataConverter dataConverter = new DataConverter();
-    private List<DataSeason> seasonsList = new ArrayList<>();
+    private final Scanner scanner = new Scanner(System.in);
+    private final ConsumeApi consumeApi = new ConsumeApi();
+    private final DataConverter dataConverter = new DataConverter();
+    private final List<DataSeason> seasonsList = new ArrayList<>();
 
 
     public void ViewMenu() {
         System.out.println("Seja bem vindo ao Screenmatch!");
-        System.out.println("");
+        System.out.println("------------------------------");
         System.out.println("Digite qual serie deseja consultar:");
         var typedSerie = scanner.nextLine();
 
+        String ADDRESS = "http://www.omdbapi.com/?t=";
+        String API_KEY = "&apikey=29b6d465";
         var json = consumeApi.GetData(ADDRESS + typedSerie.replace(" ", "+") + API_KEY);
         DataSerie dataSerie = dataConverter.getData(json, DataSerie.class);
         System.out.println("Serie:");
@@ -47,13 +45,13 @@ public class Main {
         seasonsList.forEach(t -> t.episodes().forEach(e -> System.out.println(("Episodio " + e.number() + "/Temp: " + t.season() + ": " + e.title()))));
 
         System.out.println("-------------------Melhores Episodios-------------------");
-        List<DataEpisode> dataEpisodes = seasonsList.stream().flatMap(t -> t.episodes().stream()).collect(Collectors.toList());
+        List<DataEpisode> dataEpisodes = seasonsList.stream().flatMap(t -> t.episodes().stream()).toList();
 
         dataEpisodes.stream().filter(e -> !e.rating().equalsIgnoreCase("N/A")).sorted(Comparator.comparing(DataEpisode::rating).reversed()).limit(5).forEach(e -> System.out.println("Episódio: " + e.title() + " | Rating: " + e.rating()));
 
         List<Episode> episodes = seasonsList.stream()
                 .flatMap(t -> t.episodes().stream().map(d -> new Episode(t.season(), d)))
-                .collect(Collectors.toList());
+                .toList();
 
         episodes.forEach(System.out::println);
 
